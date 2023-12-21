@@ -10,7 +10,11 @@
   },
   "content_scripts": [
     {
-      "matches": ["*://www.youtube.com/*"],
+      "matches": [
+        "*://www.youtube.com/*",
+        "*://www.linkedin.com/*",
+        "*://news.google.com/*"
+      ],
       "js": ["content.js"]
     }
   ]
