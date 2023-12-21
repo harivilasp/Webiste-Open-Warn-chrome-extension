@@ -1,13 +1,9 @@
-// Get the active tab
-chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-  var currentTab = tabs[0];
+document.getElementById("confirmButton").addEventListener("click", function () {
+  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+    chrome.tabs.remove(tabs[0].id);
+  });
+});
 
-  // Display confirmation popup
-  if (confirm("Are you sure you want to open YouTube?")) {
-    // If user clicks OK, open the tab
-    chrome.tabs.update(currentTab.id, { url: "https://www.youtube.com" });
-  } else {
-    // If user clicks Cancel, close the tab
-    chrome.tabs.remove(currentTab.id);
-  }
+document.getElementById("cancelButton").addEventListener("click", function () {
+  window.close();
 });
