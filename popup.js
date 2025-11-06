@@ -48,10 +48,24 @@ document.addEventListener("DOMContentLoaded", function () {
       // Update content scripts with new blocked websites
       chrome.tabs.query({}, function (tabs) {
         tabs.forEach(function (tab) {
-          chrome.tabs.sendMessage(tab.id, {
-            action: "updateBlockedWebsites",
-            blockedWebsites: blockedWebsites,
-          });
+          if (tab.url && tab.url.startsWith("http")) {
+            chrome.scripting.executeScript(
+              {
+                target: { tabId: tab.id },
+                function: (newBlockedWebsites) => {
+                  window.blockedWebsites = newBlockedWebsites;
+                },
+                args: [blockedWebsites],
+              },
+              () => {
+                if (chrome.runtime.lastError) {
+                  console.warn(
+                    `Scripting error in tab ${tab.id}: ${chrome.runtime.lastError.message}`
+                  );
+                }
+              }
+            );
+          }
         });
       });
     });

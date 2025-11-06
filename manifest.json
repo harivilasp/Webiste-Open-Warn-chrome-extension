@@ -3,7 +3,7 @@
   "name": "Website Open Warn",
   "version": "1.0",
   "description": "Warns and confirms before opening distracting websites and reminds you to stay on task for study purposes.",
-  "permissions": ["tabs", "storage", "alarms"],
+  "permissions": ["tabs", "storage", "alarms", "scripting"],
   "host_permissions": ["<all_urls>"],
   "background": {
     "service_worker": "background.js"

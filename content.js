@@ -25,8 +25,6 @@ function checkAndWarn() {
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.action === "remind") {
     alert("Reminder: You are still using this for study purposes!");
-  } else if (request.action === "updateBlockedWebsites") {
-    blockedWebsites = request.blockedWebsites;
   }
 });
 
