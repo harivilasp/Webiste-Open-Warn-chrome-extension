@@ -1,20 +1,20 @@
 {
-  "manifest_version": 2,
-  "name": "YouTube Warning",
+  "manifest_version": 3,
+  "name": "Website Open Warn",
   "version": "1.0",
-  "description": "Warns and confirms before opening YouTube.",
-  "permissions": ["tabs"],
-  "browser_action": {
+  "description": "Warns and confirms before opening distracting websites and reminds you to stay on task for study purposes.",
+  "permissions": ["tabs", "storage", "alarms"],
+  "host_permissions": ["<all_urls>"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
     "default_icon": "icon.png",
     "default_popup": "popup.html"
   },
   "content_scripts": [
     {
-      "matches": [
-        "*://www.youtube.com/*",
-        "*://www.linkedin.com/*",
-        "*://news.google.com/*"
-      ],
+      "matches": ["<all_urls>"],
       "js": ["content.js"]
     }
   ]

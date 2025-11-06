@@ -1,9 +1,59 @@
-document.getElementById("confirmButton").addEventListener("click", function () {
-  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-    chrome.tabs.remove(tabs[0].id);
-  });
-});
+document.addEventListener("DOMContentLoaded", function () {
+  const blockedWebsitesList = document.getElementById("blockedWebsites");
+  const newWebsiteInput = document.getElementById("newWebsite");
+  const addWebsiteButton = document.getElementById("addWebsite");
+  const saveSettingsButton = document.getElementById("saveSettings");
 
-document.getElementById("cancelButton").addEventListener("click", function () {
-  window.close();
+  let blockedWebsites = [];
+
+  // Load blocked websites from storage
+  chrome.storage.sync.get(["blockedWebsites"], function (result) {
+    if (result.blockedWebsites) {
+      blockedWebsites = result.blockedWebsites;
+      renderBlockedWebsites();
+    }
+  });
+
+  // Render blocked websites in the popup
+  function renderBlockedWebsites() {
+    blockedWebsitesList.innerHTML = "";
+    blockedWebsites.forEach((website, index) => {
+      const listItem = document.createElement("li");
+      listItem.textContent = website;
+      const removeButton = document.createElement("button");
+      removeButton.textContent = "Remove";
+      removeButton.addEventListener("click", () => {
+        blockedWebsites.splice(index, 1);
+        renderBlockedWebsites();
+      });
+      listItem.appendChild(removeButton);
+      blockedWebsitesList.appendChild(listItem);
+    });
+  }
+
+  // Add new website to the list
+  addWebsiteButton.addEventListener("click", function () {
+    const website = newWebsiteInput.value.trim();
+    if (website && !blockedWebsites.includes(website)) {
+      blockedWebsites.push(website);
+      newWebsiteInput.value = "";
+      renderBlockedWebsites();
+    }
+  });
+
+  // Save settings to storage
+  saveSettingsButton.addEventListener("click", function () {
+    chrome.storage.sync.set({ blockedWebsites: blockedWebsites }, function () {
+      alert("Settings saved!");
+      // Update content scripts with new blocked websites
+      chrome.tabs.query({}, function (tabs) {
+        tabs.forEach(function (tab) {
+          chrome.tabs.sendMessage(tab.id, {
+            action: "updateBlockedWebsites",
+            blockedWebsites: blockedWebsites,
+          });
+        });
+      });
+    });
+  });
 });

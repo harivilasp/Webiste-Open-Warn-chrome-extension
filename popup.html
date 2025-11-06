@@ -9,9 +9,16 @@
     </style>
   </head>
   <body>
-    <h3>Are you sure?</h3>
-    <button id="confirmButton">Yes</button>
-    <button id="cancelButton">No</button>
+    <h2>Website Blocker Settings</h2>
+    <div class="input-section">
+      <input type="text" id="newWebsite" placeholder="Add website URL" />
+      <button id="addWebsite">Add</button>
+    </div>
+    <div id="websiteList">
+      <h4>Blocked Websites:</h4>
+      <ul id="blockedWebsites"></ul>
+    </div>
+    <button id="saveSettings">Save Settings</button>
 
     <script src="popup.js"></script>
   </body>
